@@ -1,7 +1,11 @@
 CC := gcc
 
 IFLAG := -I $(HOME_DIR)/include
-CFLAG := -g -D DEBUG
+CFLAG := 
+
+ifeq ($(debug), 1)
+CFLAG += -D DEBUG -g
+endif
 
 SRC := $(wildcard *.c)  
 OBJ := $(SRC:.c=.o)
