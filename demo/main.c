@@ -6,16 +6,18 @@
  ************************************************************************/
 
 #include <stdio.h>
-#include "sal_print.h"
+#include "sal_trace.h"
+#include "sal_types.h"
 
-int main(int argc, char *argv[])
+INT32 main(INT32 argc, PINT8 argv[])
 {
     
     SAL_INFO("hello world\n");
     SAL_WARN("hello world\n");
     SAL_ERROR("hello world\n");
     SAL_DEBUG("hello world\n");
+    
 
-    return 0;
+    return OK;
 }
 
