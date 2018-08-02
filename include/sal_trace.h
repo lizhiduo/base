@@ -66,7 +66,7 @@
 #define SAL_DEBUG(fmt, args ...) \
         do \
         { \
-            SAL_print(GREEN "DEBUG|%s|%s|%d: " fmt NONE, \
+            SAL_print(CYAN "DEBUG|%s|%s|%d: " fmt NONE, \
                       __FILE__, __func__, __LINE__,  ## args); \
         } \
         while(0)

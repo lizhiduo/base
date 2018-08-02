@@ -18,6 +18,6 @@ INT32 main(INT32 argc, PINT8 argv[])
     SAL_DEBUG("hello world\n");
     
 
-    return OK;
+    return SUCCESS;
 }
 
