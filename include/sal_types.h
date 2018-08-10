@@ -15,6 +15,7 @@ extern "C" {
 
 /*
 * 编译器相关宏
+*
 * */
 #if defined (__GNUC__)
 /* use gcc special extension: #warning , __attribute__, etc.  */
@@ -34,7 +35,7 @@ typedef unsigned int        UINT32, *PUINT32, **PPUINT32;
 typedef unsigned long long  UINT64, *PUINT64, **PPUINT64;
 
 typedef void * Handle;
-typedef enum { FALSE, TRUE} BOOL;
+typedef enum { SAL_FALSE, SAL_TRUE} BOOL;
 
 
 #ifndef SAL_NULL
