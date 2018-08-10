@@ -26,7 +26,7 @@ extern "C" {
  *
  */
 #define SAL_LIST_FOR_EACH(pos, head) \
-    for (pos = (head)->next; pos)
+    for ((pos) = (head)->next; (pos) != (head); (pos) = (pos)->next)
 
 typedef struct tag_SAL_LIST_HEAD_S
 {

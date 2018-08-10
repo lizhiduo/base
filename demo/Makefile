@@ -9,7 +9,7 @@ endif
 
 SRC := $(wildcard *.c)  
 OBJ := $(SRC:.c=.o)
-BIN := test
+BIN := demo
 
 all : $(OBJ)
 	$(CC) -o $(BIN) $(OBJ) $(IFLAG) $(CFLAG)
