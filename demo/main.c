@@ -11,6 +11,7 @@
 #include "sal_trace.h"
 #include "sal_types.h"
 #include "sal_macro.h"
+#include "sal_list.h"
 
 static BOOL bExit = SAL_FALSE;
 
@@ -20,6 +21,7 @@ static VOID MAIN_usage(VOID)
     SAL_print("index:\n");
     SAL_print("\t 0) testSalTrace \n");
     SAL_print("\t 1) testSalMacro \n");
+    SAL_print("\t 2) testSalList \n");
     SAL_print("\t q) quit the whole sample \n");
     SAL_print("sample command: ");
     return;
@@ -55,6 +57,48 @@ static VOID MAIN_testSalMacro(VOID)
     return;
 }
 
+static VOID MAIN_testSalList(VOID)
+{
+    struct score
+    {
+        INT32 num;
+        INT32 english;
+        INT32 math;
+        SAL_LIST_HEAD_S list;
+    }stu1, stu2, stu3;
+    
+    SAL_LIST_HEAD(stScoreHead);
+    SAL_LIST_HEAD_S * pPos = NULL;
+    struct score *pTmp = NULL;
+
+
+    stu1.num = 1;
+    stu1.english = 58;
+    stu1.math = 99;
+    
+    SAL_listAdd(&(stu1.list), &stScoreHead);
+
+    stu2.num = 2;
+    stu2.english = 58;
+    stu2.math = 99;
+    
+    SAL_listAdd(&(stu2.list), &stScoreHead);
+    
+    stu3.num = 3;
+    stu3.english = 58;
+    stu3.math = 99;
+    
+    SAL_listAdd(&(stu3.list), &stScoreHead);
+
+    SAL_LIST_FOR_EACH(pPos, &stScoreHead)
+    {
+        pTmp = SAL_LIST_ENTRY(pPos, struct score, list);
+        SAL_INFO("num:%d english:%d match:%d\n", pTmp->num, pTmp->english, pTmp->math);
+    }
+
+    return;
+}
+
 INT32 main(INT32 argc, PINT8 argv[])
 {
     UINT8 op = 0;
@@ -75,6 +119,11 @@ INT32 main(INT32 argc, PINT8 argv[])
             case '1':
             {
                 MAIN_testSalMacro();
+                break;
+            }
+            case '2':
+            {
+                MAIN_testSalList();
                 break;
             } 
             case 'q':

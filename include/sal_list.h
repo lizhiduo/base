@@ -28,16 +28,17 @@ extern "C" {
 #define SAL_LIST_FOR_EACH(pos, head) \
     for ((pos) = (head)->next; (pos) != (head); (pos) = (pos)->next)
 
-typedef struct tag_SAL_LIST_HEAD_S
+typedef struct tag_SAL_LIST_HEAD_S SAL_LIST_HEAD_S;
+struct tag_SAL_LIST_HEAD_S
 {
-    struct tag_LIST_HEAD *next;
-    struct tag_LIST_HEAD *prev;
-}SAL_LIST_HEAD_S;
+    SAL_LIST_HEAD_S *next;
+    SAL_LIST_HEAD_S *prev;
+};
 
 /*
 * 链表头静态初始化
 * */
-#define LIST_HEAD(name) \
+#define SAL_LIST_HEAD(name) \
    SAL_LIST_HEAD_S name = { &(name), &(name)  }
 
 /*
