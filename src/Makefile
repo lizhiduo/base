@@ -1,7 +1,6 @@
 module_name := base
 
 IFLAG := -I $(HOME_DIR)/include
-CFLAG := 
 
 SRC := $(wildcard *.c)
 OBJS := $(SRC:.c=.o)
@@ -11,7 +10,7 @@ all : $(OBJS)
 	@mv lib$(module_name).a $(HOME_DIR)/libs
 
 %.o : %.c
-	@$(CC) $(IFLAG) -c $^ -o $@
+	$(CC) $(CFLAG) $(IFLAG) -c $^ -o $@
 
 clean:
 	@rm -rf *.o

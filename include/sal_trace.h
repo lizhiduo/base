@@ -62,7 +62,8 @@
                       __FILE__, __func__, __LINE__,  ## args); \
         } \
         while(0)
-#ifdef DEBUG
+
+#ifdef _SAL_DEBUG_
 #define SAL_DEBUG(fmt, args ...) \
         do \
         { \

@@ -22,6 +22,7 @@ static VOID MAIN_usage(VOID)
     SAL_print("\t 0) testSalTrace \n");
     SAL_print("\t 1) testSalMacro \n");
     SAL_print("\t 2) testSalList \n");
+    SAL_print("\t 3) testSalAssert \n");
     SAL_print("\t q) quit the whole sample \n");
     SAL_print("sample command: ");
     return;
@@ -99,6 +100,14 @@ static VOID MAIN_testSalList(VOID)
     return;
 }
 
+VOID MAIN_testSalAssert()
+{
+    PUINT8 pbuf = SAL_NULL;
+
+    SAL_ASSERT_NULL(pbuf);
+    
+}
+
 INT32 main(INT32 argc, PINT8 argv[])
 {
     UINT8 op = 0;
@@ -125,6 +134,11 @@ INT32 main(INT32 argc, PINT8 argv[])
             {
                 MAIN_testSalList();
                 break;
+            }
+            case '3':
+            {
+                MAIN_testSalAssert();
+                break;
             } 
             case 'q':
             case 'Q':
@@ -145,6 +159,6 @@ INT32 main(INT32 argc, PINT8 argv[])
         }
     }
 
-    return SUCCESS;
+    return SAL_OK;
 }
 

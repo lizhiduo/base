@@ -8,7 +8,8 @@
 #ifndef _SAL_MACRO_H
 #define _SAL_MACRO_H
 
-//#include <stddef.h>
+#include "sal_trace.h"
+#include "sal_types.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -48,6 +49,29 @@ extern "C" {
 const typeof( ((type *)0)->member  ) *__mptr = (ptr);    \
                  (type *)( (char *)__mptr - SAL_OFFSETOF(type,member)  );})
 
+/**
+ * biref: check whether the ptr is empty
+ */
+#define CHECK_NULL_PTR(ptr)\
+    do{\
+        if(NULL == ptr)\
+        {\
+            SAL_ERROR("NULL pointer\n");\
+            return SAL_FAILURE;\
+        }\
+    }while(0)
+
+#ifdef _SAL_DEBUG_
+#define SAL_ASSERT_NULL(x) \
+    if(SAL_NULL == (x)) { \
+        fprintf(stderr, "ASSERT (%s|%s|%d)\r\n", __FILE__, __func__, __LINE__); \
+        while('q' == getchar()); \
+    }
+#else
+
+#define SAL_ASSERT_NULL(x)
+
+#endif
 
 #ifdef __cplusplus
 }

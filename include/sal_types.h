@@ -34,7 +34,7 @@ typedef unsigned short       UINT16, *PUINT16, **PPUINT16;
 typedef unsigned int        UINT32, *PUINT32, **PPUINT32;
 typedef unsigned long long  UINT64, *PUINT64, **PPUINT64;
 
-typedef void * Handle;
+typedef void * Handl;
 typedef enum { SAL_FALSE, SAL_TRUE} BOOL;
 
 
@@ -42,18 +42,18 @@ typedef enum { SAL_FALSE, SAL_TRUE} BOOL;
 #define SAL_NULL ((void *) 0)
 #endif
 
-#ifndef SUCCESS
-#define SUCCESS (0)
+#ifndef SAL_OK
+#define SAL_OK (0)
 #endif
 
-#ifndef FAILURE
-#define FAILURE (-1)
+#ifndef SAL_FAIL
+#define SAL_FAIL (-1)
 #endif
 
 /*
 * 编译期间 检查 类型 占用空间
 * */
-#define ASSERT_CHECK_TYPE(type, result) typedef char result[(type) ? SUCCESS : FAILURE]
+#define ASSERT_CHECK_TYPE(type, result) typedef char result[(type) ? SAL_OK : SAL_FAIL]
 
 ASSERT_CHECK_TYPE(sizeof(UINT8)==1, typeUINT8WrongSize);
 ASSERT_CHECK_TYPE(sizeof(UINT16)==2, typeUINT16WrongSize);

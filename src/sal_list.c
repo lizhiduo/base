@@ -31,6 +31,10 @@ VOID SAL_listAddTail(SAL_LIST_HEAD_S *new, SAL_LIST_HEAD_S *head)
     __SAL_listAdd(new, head->prev, head);
 }
 
+/**
+ * brief: Delete a list entry by making the prev/next entries point to each other. 
+ *
+ */
 static VOID __SAL_listDel(SAL_LIST_HEAD_S *prev, SAL_LIST_HEAD_S *next)
 {
     next->prev = prev;
@@ -59,6 +63,10 @@ INT32 SAL_listIsLast(const SAL_LIST_HEAD_S *list, const       SAL_LIST_HEAD_S *h
     return list->next == head;
 }
 
+/**
+ * 
+ *
+ */
 INT32 SAL_listIsEmpty(const SAL_LIST_HEAD_S *head)
 {
     return head->next == head;

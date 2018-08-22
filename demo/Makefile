@@ -1,9 +1,4 @@
-IFLAG := -I $(HOME_DIR)/include
-CFLAG := 
-
-ifeq ($(debug), 1)
-CFLAG += -D DEBUG -g
-endif
+IFLAG := -I $(HOME_DIR)/include 
 
 LIBS := -L $(HOME_DIR)/libs -lbase
 

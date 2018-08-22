@@ -6,6 +6,12 @@ export HOME_DIR
 export CC
 export AR
 
+ifeq ($(debug), 1)
+CFLAG = -D _SAL_DEBUG_ -g
+endif
+
+export CFLAG
+
 ifeq ($(v), 1)
 MAKE := make
 else
