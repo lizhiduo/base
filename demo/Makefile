@@ -1,6 +1,7 @@
 IFLAG := -I $(HOME_DIR)/include 
 
 LIBS := -L $(HOME_DIR)/libs -lbase
+LIBS +=  -lpthread
 
 SRC := $(wildcard *.c)  
 OBJ := $(SRC:.c=.o)

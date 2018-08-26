@@ -12,6 +12,7 @@
 #include "sal_types.h"
 #include "sal_macro.h"
 #include "sal_list.h"
+#include "sal_thread.h"
 
 static BOOL bExit = SAL_FALSE;
 
@@ -23,6 +24,8 @@ static VOID MAIN_usage(VOID)
     SAL_print("\t 1) testSalMacro \n");
     SAL_print("\t 2) testSalList \n");
     SAL_print("\t 3) testSalAssert \n");
+    SAL_print("\t 4) testSalThread \n");
+    SAL_print("\t 5) testSalThreadStop \n");
     SAL_print("\t q) quit the whole sample \n");
     SAL_print("sample command: ");
     return;
@@ -100,12 +103,47 @@ static VOID MAIN_testSalList(VOID)
     return;
 }
 
-VOID MAIN_testSalAssert()
+static VOID MAIN_testSalAssert()
 {
     PUINT8 pbuf = SAL_NULL;
 
     SAL_ASSERT_NULL(pbuf);
     
+}
+
+PVOID MAIN_threadFun(PVOID args)
+{
+    UINT16 time = 0;
+    
+    while (1)
+    {
+        SAL_INFO("runtime %d\n", time);
+        time++;
+        sleep(1);
+    }
+    
+    return SAL_NULL;
+}
+
+static SAL_thrdHndl hndl =SAL_NULL;
+static VOID MAIN_testSalThread()
+{
+    SAL_THREAD_SET_S set = {0};
+
+    set.name = "thrd1";
+    set.policy = SAL_SCHED_RR;
+    set.priority = 55;
+    set.stackSize = 20480;
+    set.cb = MAIN_threadFun;
+
+    SAL_thrdCreate(&hndl, &set);
+    
+}
+
+static void MAIN_testThrdStop()
+{
+    SAL_thrdKill(hndl);
+    SAL_INFO("thrd is stop\n");
 }
 
 INT32 main(INT32 argc, PINT8 argv[])
@@ -138,6 +176,16 @@ INT32 main(INT32 argc, PINT8 argv[])
             case '3':
             {
                 MAIN_testSalAssert();
+                break;
+            } 
+            case '4':
+            {
+                MAIN_testSalThread();
+                break;
+            }
+            case '5':
+            {
+                MAIN_testThrdStop();
                 break;
             } 
             case 'q':

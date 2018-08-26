@@ -73,6 +73,15 @@ const typeof( ((type *)0)->member  ) *__mptr = (ptr);    \
 
 #endif
 
+#define SAL_isSuccess(sta) (SAL_OK == (sta))
+#define SAL_isFail(sta) (SAL_OK != (sta))
+
+#define SAL_isNull(ptr) (SAL_NULL == (ptr))
+#define SAL_isNotNull(ptr) (SAL_NULL != (ptr))
+
+#define SAL_isTrue(sta) ((sta))
+#define SAL_isFalse(sta) (!(sta))
+
 #ifdef __cplusplus
 }
 #endif
