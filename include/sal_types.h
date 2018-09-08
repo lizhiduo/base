@@ -42,6 +42,11 @@ typedef enum { SAL_FALSE, SAL_TRUE} BOOL;
 #define SAL_NULL ((void *) 0)
 #endif
 
+#ifndef NULL
+#define NULL ((void *) 0)
+#endif
+
+
 #ifndef SAL_OK
 #define SAL_OK (0)
 #endif

@@ -13,6 +13,7 @@
 #include "sal_macro.h"
 #include "sal_list.h"
 #include "sal_thread.h"
+#include "sal_file.h"
 
 static BOOL bExit = SAL_FALSE;
 
@@ -26,6 +27,7 @@ static VOID MAIN_usage(VOID)
     SAL_print("\t 3) testSalAssert \n");
     SAL_print("\t 4) testSalThread \n");
     SAL_print("\t 5) testSalThreadStop \n");
+    SAL_print("\t 6) testSalFile \n");
     SAL_print("\t q) quit the whole sample \n");
     SAL_print("sample command: ");
     return;
@@ -146,6 +148,22 @@ static void MAIN_testThrdStop()
     SAL_INFO("thrd is stop\n");
 }
 
+static void MAIN_testSalFile()
+{
+    SAL_fileHndl fileHndl = 0;
+    INT8 wBuf[256] = "write test";
+    INT8 rBuf[256] = {0};
+    UINT32 bytes = 0;
+    
+    SAL_fileOpen("test", SAL_FILEMODE_WRONLY, &fileHndl);
+
+    SAL_fileWrite(fileHndl, wBuf, 256, &bytes);
+
+    SAL_fileRead(fileHndl, rBuf, 256, &bytes);
+
+    SAL_fileClose(fileHndl);
+}
+
 INT32 main(INT32 argc, PINT8 argv[])
 {
     UINT8 op = 0;
@@ -186,6 +204,11 @@ INT32 main(INT32 argc, PINT8 argv[])
             case '5':
             {
                 MAIN_testThrdStop();
+                break;
+            }
+            case '6':
+            {
+                MAIN_testSalFile();
                 break;
             } 
             case 'q':
