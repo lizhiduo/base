@@ -169,12 +169,20 @@ static void MAIN_testSalFile()
 static void MAIN_testSalTime()
 {
     UINT64 start = 0, end = 0;
+    UINT8 time[16] = {0};
 
     start = SAL_getTimeOfJiffies();
     SAL_usleep(10*1000);
     end = SAL_getTimeOfJiffies();
 
     SAL_INFO("%lld\n", end - start);
+    SAL_getStartTime();
+    SAL_getTimeStr(time, SAL_ARRAY_SIZE(time));
+    SAL_getEndTime();
+  
+    SAL_calcTimeInterval();
+    SAL_INFO("%s\n", time);
+    
 }
 
 

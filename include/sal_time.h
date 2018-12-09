@@ -40,7 +40,6 @@ extern "C"{
  *      constants or macros define              *
  *----------------------------------------------*/
 
-
 /*==============================================*
  *      project-wide global variables           *
  *----------------------------------------------*/
@@ -51,8 +50,13 @@ extern "C"{
  *      routines' or functions' implementations *
  *----------------------------------------------*/
 UINT64 SAL_getTimeOfJiffies();
+INT32 SAL_getTimeStr(void *buf, UINT32 bufLen);
 INT32 SAL_msleep(INT32 mSec);
 INT32 SAL_usleep(INT32 uSec);
+INT32 SAL_getStartTime();
+INT32 SAL_getEndTime();
+INT32 SAL_calcTimeInterval();
+
 
 
 #ifdef __cplusplus

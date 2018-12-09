@@ -28,19 +28,25 @@
 #include <sys/time.h>
 #include <errno.h>
 #include <unistd.h>
+#include <time.h>
 
 #include "sal_time.h"
-
+#include "sal_trace.h"
+#include "sal_macro.h"
 
 /*==============================================*
  *      constants or macros define              *
  *----------------------------------------------*/
-
+typedef struct tagTIME_INTERVAL
+{
+    clock_t begin; 
+    clock_t end;
+}TIME_INTERVAL;
 
 /*==============================================*
  *      project-wide global variables           *
  *----------------------------------------------*/
-
+static TIME_INTERVAL g_TimeInterval;
 
 
 /*==============================================*
@@ -163,6 +169,78 @@ UINT64 SAL_getSecTime()
     gettimeofday(&tv, NULL);
 
     return tv.tv_sec;
+}
+
+/*****************************************************************************
+*   Prototype    : SAL_getTimeStr
+*   Description  :  
+*   Input        : void *buf  
+*   Output       : None
+*   Return Value : INT32
+*   Calls        : 
+*   Called By    : 
+*
+*   History:
+* 
+*       1.  Date         : 2018/12/9
+*           Author       : lizhiduo
+*           Modification : Created function
+*
+*****************************************************************************/
+INT32 SAL_getTimeStr(void *buf, UINT32 bufLen)
+{
+    time_t rawtime = 0;
+    struct tm * timeinfo = NULL;
+
+    // 时间格式化字符串长度不能小于16
+    if (SAL_isNull(buf) || bufLen < 16)
+    {
+        SAL_ERROR("buf is NULL\n");
+        return SAL_FAIL;
+    }
+    
+    time(&rawtime);
+
+    timeinfo = localtime(&rawtime);
+
+    timeinfo->tm_year += 1900;
+    timeinfo->tm_mon += 1;
+
+    SAL_INFO("%04d%02d%02d-%02d%02d%02d\n", timeinfo->tm_year, 
+        timeinfo->tm_mon, timeinfo->tm_mday, timeinfo->tm_hour, 
+        timeinfo->tm_min, timeinfo->tm_sec);
+
+   sprintf(buf, "%04d%02d%02d-%02d%02d%02d", timeinfo->tm_year, 
+        timeinfo->tm_mon, timeinfo->tm_mday, timeinfo->tm_hour, 
+        timeinfo->tm_min, timeinfo->tm_sec);
+   
+    return SAL_OK;
+}
+
+INT32 SAL_getStartTime()
+{
+    g_TimeInterval.begin = clock();
+
+    return SAL_OK;
+}
+
+INT32 SAL_getEndTime()
+{
+    g_TimeInterval.end = clock();
+
+    return SAL_OK;
+}
+
+INT32 SAL_calcTimeInterval()
+{
+    double tmp = 0;
+
+    tmp = (double)(g_TimeInterval.end - g_TimeInterval.begin)
+                    / CLOCKS_PER_SEC;
+
+     SAL_INFO("time is: %lf ms\n", tmp * 1000);
+
+     return SAL_OK;
 }
 
 /*****************************************************************************
