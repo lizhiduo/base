@@ -14,6 +14,7 @@
 #include "sal_list.h"
 #include "sal_thread.h"
 #include "sal_file.h"
+#include "sal_time.h"
 
 static BOOL bExit = SAL_FALSE;
 
@@ -28,6 +29,7 @@ static VOID MAIN_usage(VOID)
     SAL_print("\t 4) testSalThread \n");
     SAL_print("\t 5) testSalThreadStop \n");
     SAL_print("\t 6) testSalFile \n");
+    SAL_print("\t 7) testSalTime \n");
     SAL_print("\t q) quit the whole sample \n");
     SAL_print("sample command: ");
     return;
@@ -164,6 +166,18 @@ static void MAIN_testSalFile()
     SAL_fileClose(fileHndl);
 }
 
+static void MAIN_testSalTime()
+{
+    UINT64 start = 0, end = 0;
+
+    start = SAL_getTimeOfJiffies();
+    SAL_usleep(10*1000);
+    end = SAL_getTimeOfJiffies();
+
+    SAL_INFO("%lld\n", end - start);
+}
+
+
 INT32 main(INT32 argc, PINT8 argv[])
 {
     UINT8 op = 0;
@@ -209,6 +223,11 @@ INT32 main(INT32 argc, PINT8 argv[])
             case '6':
             {
                 MAIN_testSalFile();
+                break;
+            }
+            case '7':
+            {
+                MAIN_testSalTime();
                 break;
             } 
             case 'q':
