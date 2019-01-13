@@ -37,6 +37,7 @@ typedef enum
 typedef struct tag_SAL_THREAD_SET_S
 {
     SAL_THRD_CB cb;
+    PVOID       cbArgv;
     UINT32      stackSize;
     UINT8       policy;//调度策略
     UINT8       priority;//优先级

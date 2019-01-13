@@ -50,6 +50,19 @@ const typeof( ((type *)0)->member  ) *__mptr = (ptr);    \
                  (type *)( (char *)__mptr - SAL_OFFSETOF(type,member)  );})
 
 /**
+ * biref: check whether the ret is err
+ */
+#define CHECK_RET_ERR(ret)\
+    do{\
+        if(SAL_OK != ret)\
+        {\
+            SAL_ERROR("ret[%d] is fail\n", ret);\
+            return SAL_FAIL;\
+        }\
+    }while(0)
+
+
+/**
  * biref: check whether the ptr is empty
  */
 #define CHECK_NULL_PTR(ptr)\
@@ -57,7 +70,7 @@ const typeof( ((type *)0)->member  ) *__mptr = (ptr);    \
         if(NULL == ptr)\
         {\
             SAL_ERROR("NULL pointer\n");\
-            return SAL_FAILURE;\
+            return SAL_FAIL;\
         }\
     }while(0)
 

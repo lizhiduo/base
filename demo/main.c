@@ -129,7 +129,7 @@ PVOID MAIN_threadFun(PVOID args)
     return SAL_NULL;
 }
 
-static SAL_thrdHndl hndl =SAL_NULL;
+static SAL_thrdHndl hndl = SAL_NULL;
 static VOID MAIN_testSalThread()
 {
     SAL_THREAD_SET_S set = {0};
@@ -139,6 +139,7 @@ static VOID MAIN_testSalThread()
     set.priority = 55;
     set.stackSize = 20480;
     set.cb = MAIN_threadFun;
+    set.cbArgv = NULL;
 
     SAL_thrdCreate(&hndl, &set);
     
@@ -170,19 +171,21 @@ static void MAIN_testSalTime()
 {
     UINT64 start = 0, end = 0;
     UINT8 time[16] = {0};
-
+    TIME_S t1 = {0};
+    TIME_S t2 = {0};
+    
     start = SAL_getTimeOfJiffies();
     SAL_usleep(10*1000);
     end = SAL_getTimeOfJiffies();
 
     SAL_INFO("%lld\n", end - start);
-    SAL_getStartTime();
+    SAL_getTime(&t1);
     SAL_getTimeStr(time, SAL_ARRAY_SIZE(time));
-    SAL_getEndTime();
-  
-    SAL_calcTimeInterval();
-    SAL_INFO("%s\n", time);
+    SAL_getTime(&t2);
     
+    SAL_INFO("%lld\n", SAL_getTimeSpan(t1, t2));
+    
+    SAL_INFO("%s\n", time);
 }
 
 

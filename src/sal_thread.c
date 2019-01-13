@@ -7,15 +7,48 @@
 #include <pthread.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/prctl.h>
 
 #include "sal_thread.h"
 #include "sal_macro.h"
 
+#define MAX_THRD_NAME_CNT (32)
+
+
 typedef struct tag_SAL_THREAD_S
 {
-    pthread_t            hndl;
+    pthread_t        hndl;
+    INT8             thrdName[MAX_THRD_NAME_CNT + 1];
     SAL_THREAD_SET_S set;
-}SAL_THREAD_S;
+} SAL_THREAD_S, *PSAL_THRD_S;
+
+/**
+ * @brief 线程回调函数
+ * 
+ * @param[in] argv 输入参数指针
+ *
+ * @return
+ *     @retval NULL
+ */
+static PVOID SAL_thrdCb(PVOID argv)
+{
+    PVOID       ret      = NULL;
+    PSAL_THRD_S pthrdObj = NULL;
+    
+    if (SAL_isNull(argv))
+    {
+        SAL_ERROR("argv is null\n");
+        return NULL;
+    }
+    
+    pthrdObj = (PSAL_THRD_S)argv;
+
+    prctl(PR_SET_NAME, pthrdObj->thrdName);
+    
+    ret = pthrdObj->set.cb(pthrdObj->set.cbArgv);
+    
+    return ret;
+}
 
 /*****************************************************************************
 *   Prototype    : SAL_getThrdPolicy
@@ -132,13 +165,16 @@ static INT32 SAL_initThrdAttr(SAL_THREAD_S *pObj)
         goto attrErr;
     }
 
-    ret = pthread_create(&pObj->hndl, &thrdAttr, pObj->set.cb, NULL);
+    ret = pthread_create(&pObj->hndl, &thrdAttr, SAL_thrdCb, pObj);
     if (SAL_isFail(ret))
     {
         SAL_ERROR("create err:%x\n", ret);
         goto attrErr;
     }
 
+//    ret = pthread_setname_np(pObj->hndl, pObj->thrdName);
+//    CHECK_RET_ERR(ret);
+    
     return ret;
     
 attrErr:
@@ -151,6 +187,7 @@ attrErr:
 INT32 SAL_thrdCreate(SAL_thrdHndl *hndl, SAL_THREAD_SET_S *set)
 {
     INT32        ret = SAL_OK;
+    UINT32       nameLen = 0;
     SAL_THREAD_S *pObj = SAL_NULL;
 
     SAL_ASSERT_NULL(set);
@@ -161,7 +198,7 @@ INT32 SAL_thrdCreate(SAL_thrdHndl *hndl, SAL_THREAD_SET_S *set)
         SAL_ERROR("set or hndl is null\n");
         return SAL_FAIL;
     }
-
+    
     pObj = (SAL_THREAD_S *)malloc(sizeof(*pObj));
     if (SAL_isNull(pObj))
     {
@@ -171,7 +208,10 @@ INT32 SAL_thrdCreate(SAL_thrdHndl *hndl, SAL_THREAD_SET_S *set)
 
 
     memcpy(&pObj->set, set, sizeof(*set));
-
+    nameLen = SAL_MIN(MAX_THRD_NAME_CNT, strlen(pObj->set.name));
+    strncpy(pObj->thrdName, pObj->set.name, nameLen);
+    SAL_INFO("thrdName:%s\n", pObj->thrdName);
+    
     ret = SAL_initThrdAttr(pObj);
     if (SAL_isFail(ret))
     {

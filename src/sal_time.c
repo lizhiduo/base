@@ -25,7 +25,6 @@
  *----------------------------------------------*/
 #include <sys/select.h>
 #include <sys/times.h>
-#include <sys/time.h>
 #include <errno.h>
 #include <unistd.h>
 #include <time.h>
@@ -37,16 +36,10 @@
 /*==============================================*
  *      constants or macros define              *
  *----------------------------------------------*/
-typedef struct tagTIME_INTERVAL
-{
-    clock_t begin; 
-    clock_t end;
-}TIME_INTERVAL;
 
 /*==============================================*
  *      project-wide global variables           *
  *----------------------------------------------*/
-static TIME_INTERVAL g_TimeInterval;
 
 
 /*==============================================*
@@ -217,30 +210,28 @@ INT32 SAL_getTimeStr(void *buf, UINT32 bufLen)
     return SAL_OK;
 }
 
-INT32 SAL_getStartTime()
+/**
+ * @brief 获取当前时间
+ */
+INT32 SAL_getTime(TIME_S *time)
 {
-    g_TimeInterval.begin = clock();
-
-    return SAL_OK;
+    if (SAL_isNull(time))
+    {
+        SAL_ERROR("time is null\n");
+        return SAL_FAIL;
+    }
+    
+    return gettimeofday(time, NULL);
 }
 
-INT32 SAL_getEndTime()
+UINT64 SAL_getTimeSpan(TIME_S begin, TIME_S end)
 {
-    g_TimeInterval.end = clock();
+    UINT64 ts = 0;
+    
+    ts = (end.tv_sec - begin.tv_sec) * 1000000 
+         + (end.tv_usec - begin.tv_usec);
 
-    return SAL_OK;
-}
-
-INT32 SAL_calcTimeInterval()
-{
-    double tmp = 0;
-
-    tmp = (double)(g_TimeInterval.end - g_TimeInterval.begin)
-                    / CLOCKS_PER_SEC;
-
-     SAL_INFO("time is: %lf ms\n", tmp * 1000);
-
-     return SAL_OK;
+    return ts;
 }
 
 /*****************************************************************************

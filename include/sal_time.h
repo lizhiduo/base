@@ -25,6 +25,8 @@
 /*==============================================*
  *      include header files                    *
  *----------------------------------------------*/
+#include <sys/time.h>
+
 #include "sal_types.h"
 
 
@@ -39,6 +41,7 @@ extern "C"{
 /*==============================================*
  *      constants or macros define              *
  *----------------------------------------------*/
+typedef struct timeval TIME_S;
 
 /*==============================================*
  *      project-wide global variables           *
@@ -53,9 +56,8 @@ UINT64 SAL_getTimeOfJiffies();
 INT32 SAL_getTimeStr(void *buf, UINT32 bufLen);
 INT32 SAL_msleep(INT32 mSec);
 INT32 SAL_usleep(INT32 uSec);
-INT32 SAL_getStartTime();
-INT32 SAL_getEndTime();
-INT32 SAL_calcTimeInterval();
+INT32 SAL_getTime(TIME_S *time);
+UINT64 SAL_getTimeSpan(TIME_S begin, TIME_S end);
 
 
 
