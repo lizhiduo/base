@@ -15,6 +15,9 @@
 #include "sal_thread.h"
 #include "sal_file.h"
 #include "sal_time.h"
+#include "sal_queue.h"
+
+#define MAX_QUE_NODE_NUM (10)
 
 static BOOL bExit = SAL_FALSE;
 
@@ -30,6 +33,7 @@ static VOID MAIN_usage(VOID)
     SAL_print("\t 5) testSalThreadStop \n");
     SAL_print("\t 6) testSalFile \n");
     SAL_print("\t 7) testSalTime \n");
+    SAL_print("\t 8) testSalQue \n");
     SAL_print("\t q) quit the whole sample \n");
     SAL_print("sample command: ");
     return;
@@ -188,6 +192,44 @@ static void MAIN_testSalTime()
     SAL_INFO("%s\n", time);
 }
 
+static void MAIN_testSalQue()
+{
+    UINT32 i = 0;
+    UINT32 nodeNum = 0;
+    QUE_HNDL_S dataQue = {0};
+    QUE_NODE_S node[MAX_QUE_NODE_NUM] = {{0}};
+    PQUE_NODE_S pTmpNode = NULL;
+    
+    for (i = 0; i < MAX_QUE_NODE_NUM; ++i)
+    {
+        node[i].idx = i;
+        SAL_quePush(&dataQue, &node[i]);
+    }
+
+    pTmpNode = SAL_quePeep(&dataQue);
+    if (pTmpNode)
+    {
+        SAL_INFO("idx:%d\n", pTmpNode->idx);
+        pTmpNode = NULL;
+    }
+    
+    nodeNum = SAL_queGetNodeNum(&dataQue);
+    SAL_INFO("nodeNum:%d\n", nodeNum);
+    for (i = 0; i < nodeNum; ++i)
+    {
+        pTmpNode = SAL_quePop(&dataQue);
+        if (pTmpNode)
+        {
+            SAL_INFO("idx:%d\n", pTmpNode->idx);
+            pTmpNode = NULL;
+        }
+        else
+        {
+            SAL_INFO("pop err\n");
+        }
+    }
+    
+}
 
 INT32 main(INT32 argc, PINT8 argv[])
 {
@@ -239,6 +281,11 @@ INT32 main(INT32 argc, PINT8 argv[])
             case '7':
             {
                 MAIN_testSalTime();
+                break;
+            } 
+            case '8':
+            {
+                MAIN_testSalQue();
                 break;
             } 
             case 'q':
